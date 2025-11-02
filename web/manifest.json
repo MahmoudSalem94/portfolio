@@ -1,11 +1,11 @@
 {
-    "name": "my_portfolio",
-    "short_name": "my_portfolio",
+    "name": "Mahmoud Salem Ibrahim - Portfolio",
+    "short_name": "MS Portfolio",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0A0E27",
+    "theme_color": "#667EEA",
+    "description": "Flutter Developer specializing in mobile apps, payment integration, and real-time features. Portfolio showcasing AYSHEI, xfi, and Dalma Mall apps.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
