@@ -302,20 +302,38 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
                 const SizedBox(height: 40),
 
                 // CTA Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _gradientButton(
-                      'View Projects',
-                      () => _scrollToSection(_projectsKey),
-                    ),
-                    const SizedBox(width: 20),
-                    _outlineButton(
-                      'Download CV',
-                      () => _openUrl(cvUrl),
-                    ),
-                  ],
+                // Responsive CTA Buttons
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Use a breakpoint to decide the layout.
+                    // e.g., 420 pixels is a good breakpoint for these two buttons.
+                    bool isWide = constraints.maxWidth > 420;
+
+                    return Flex(
+                      direction: isWide ? Axis.horizontal : Axis.vertical,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // This ensures the column takes only the needed height
+                      mainAxisSize: MainAxisSize.min,
+                      // This centers the items when in a column
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _gradientButton(
+                          'View Projects',
+                              () => _scrollToSection(_projectsKey),
+                        ),
+                        // Use SizedBox with height for column, width for row
+                        isWide
+                            ? const SizedBox(width: 20)
+                            : const SizedBox(height: 20),
+                        _outlineButton(
+                          'Download CV',
+                              () => _openUrl(cvUrl),
+                        ),
+                      ],
+                    );
+                  },
                 ),
+
               ],
             );
           },
@@ -933,25 +951,42 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
             const SizedBox(height: 25),
             const Divider(color: Colors.white10, thickness: 1),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                const Text(
-                  'Available on:',
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 15),
-                if (appStoreUrl != null)
-                  _storeButton('App Store', Icons.apple, () => _openUrl(appStoreUrl)),
-                if (appStoreUrl != null && playStoreUrl != null)
-                  const SizedBox(width: 10),
-                if (playStoreUrl != null)
-                  _storeButton('Play Store', Icons.android, () => _openUrl(playStoreUrl)),
-              ],
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Decide on a breakpoint. 400 is a reasonable value for this context.
+                bool isWide = constraints.maxWidth > 400;
+
+                return Flex(
+                  // Use Row for wide screens, Column for narrow screens
+                  direction: isWide ? Axis.horizontal : Axis.vertical,
+                  crossAxisAlignment: isWide ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min, // Important to prevent Flex from expanding
+                  children: [
+                    const Text(
+                      'Available on:',
+                      style: TextStyle(
+                        color: Colors.white60,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    // Add spacing conditionally
+                    isWide
+                        ? const SizedBox(width: 15)
+                        : const SizedBox(height: 15),
+                    if (appStoreUrl != null)
+                      _storeButton('App Store', Icons.apple, () => _openUrl(appStoreUrl)),
+                    if (appStoreUrl != null && playStoreUrl != null)
+                      isWide
+                          ? const SizedBox(width: 10)
+                          : const SizedBox(height: 10),
+                    if (playStoreUrl != null)
+                      _storeButton('Play Store', Icons.android, () => _openUrl(playStoreUrl)),
+                  ],
+                );
+              },
             ),
+
           ],
         ],
       ),
