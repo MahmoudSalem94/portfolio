@@ -16,7 +16,7 @@ jobs:
           flutter-version: '3.35.7'  # Use your Flutter version
 
       - name: Build web
-        run: flutter build web --base-href "/your-repository-name/"
+        run: flutter build web --base-href "/portfolio/"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
