@@ -42,6 +42,11 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
   final String cvUrl = 'https://drive.google.com/file/d/1hMBrd2a1YKdn5Dc0TY7Ehg8fZBiH6emy/view?usp=drive_link';
   final String phoneNumber = '+971555152207';
   final String email = 'mahmoud.salem94@outlook.com';
+// Add this key at the top of your _MyHomePageState class
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+// ... inside your _MyHomePageState class ...
+
 
   // Open URL method
   Future<void> _openUrl(String url) async {
@@ -66,10 +71,45 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
       );
     }
   }
+// Add this method inside your _MyHomePageState class
+  Widget _drawerNavButton(String text, VoidCallback onPressed) {
+    return ListTile(
+      title: Text(
+        text,
+        textAlign: TextAlign.center,      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+      ),
+      ),
+      onTap: () {
+        // Close the drawer first
+        Navigator.of(context).pop();
+        // Then execute the scroll action
+        onPressed();
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: const Color(0xFF1A1A2E),
+      // Define the drawer that opens from the right
+      endDrawer: Drawer(
+        backgroundColor: const Color(0xFF1A1A2E).withOpacity(0.95),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 40),
+          children: [
+            _drawerNavButton('Home', () => _scrollToSection(_homeKey)),
+            _drawerNavButton('About', () => _scrollToSection(_aboutKey)),
+            _drawerNavButton('Skills', () => _scrollToSection(_skillsKey)),
+            _drawerNavButton('Projects', () => _scrollToSection(_projectsKey)),
+          ],
+        ),
+      ),
       body: Stack(
         children: [
           // Animated background
@@ -152,7 +192,7 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
                   IconButton(
                     icon: const Icon(Icons.menu, color: Colors.white),
                     onPressed: () {
-                      // Add mobile menu functionality
+                      _scaffoldKey.currentState?.openEndDrawer();
                     },
                   ),
                 ],
