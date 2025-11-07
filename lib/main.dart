@@ -254,7 +254,7 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
   Widget _buildHeroSection({required GlobalKey key}) {
     return Container(
       key: key,
-      height: MediaQuery.of(context).size.height,
+     
       padding: const EdgeInsets.only(left: 50, right: 50, top: 100,bottom:100), // Added top padding to avoid navbar
       child: Center(
         child: LayoutBuilder(
