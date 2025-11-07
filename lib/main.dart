@@ -35,7 +35,9 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _homeKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
+  final GlobalKey _achievementsKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
+  final GlobalKey _allProjectsKey = GlobalKey();
   final GlobalKey _skillsKey = GlobalKey();
 
   // Contact Information
@@ -44,6 +46,9 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
   final String email = 'mahmoud.salem94@outlook.com';
 // Add this key at the top of your _MyHomePageState class
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // Project filter state
+  String _selectedCategory = 'All';
 
 // ... inside your _MyHomePageState class ...
 
@@ -138,11 +143,17 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
                 // About Section
                 _buildAboutSection(key: _aboutKey),
 
+                // Achievements Section
+                _buildAchievementsSection(key: _achievementsKey),
+
                 // Skills Section
                 _buildSkillsSection(key: _skillsKey),
 
                 // Projects Section
                 _buildProjectsSection(key: _projectsKey),
+
+                // All Projects Section
+                _buildAllProjectsSection(key: _allProjectsKey),
 
                 // Footer
                 _buildFooter(),
@@ -244,7 +255,7 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
     return Container(
       key: key,
       height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+      padding: const EdgeInsets.only(left: 50, right: 50, top: 100), // Added top padding to avoid navbar
       child: Center(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -300,16 +311,16 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
 
                 // Name
                 Text(
-                  'Mahmoud Salem Ibrahim',
+                  'MAHMOUD SALEM IBRAHIM',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: isMobile ? 36 : 56,
+                    fontSize: isMobile ? 32 : 52,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    letterSpacing: 1.2,
+                    letterSpacing: 2,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 // Title with gradient
                 ShaderMask(
@@ -317,28 +328,63 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
                     colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
                   ).createShader(bounds),
                   child: Text(
-                    'Flutter Developer & Designer',
+                    'Flutter Developer | 5+ Years Experience | 15+ Apps Published',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isMobile ? 20 : 28,
+                      fontSize: isMobile ? 16 : 24,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+
+                // Location
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.location_on, color: Color(0xFF667EEA), size: 20),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Based in Dubai, UAE',
+                      style: TextStyle(
+                        fontSize: isMobile ? 14 : 16,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20),
 
-                // Description
+                // Tagline/Subtitle
                 SizedBox(
-                  width: isMobile ? double.infinity : 600,
+                  width: isMobile ? double.infinity : 700,
                   child: Text(
-                    'Passionate about creating beautiful and functional mobile & web applications',
+                    'Specialized in Fintech, E-commerce & Enterprise Mobile Solutions',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isMobile ? 16 : 18,
+                      fontSize: isMobile ? 16 : 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: isMobile ? double.infinity : 700,
+                  child: Text(
+                    'Expert in Payment Integrations, Security Implementations & Real-time Features',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: isMobile ? 14 : 18,
                       color: Colors.white70,
                     ),
                   ),
                 ),
+                const SizedBox(height: 40),
+
+                // Quick Stats Cards
+                _buildQuickStats(isMobile),
                 const SizedBox(height: 40),
 
                 // CTA Buttons
@@ -378,6 +424,78 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildQuickStats(bool isMobile) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 1000),
+      child: Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        alignment: WrapAlignment.center,
+        children: [
+          _statCard('15+', 'Apps Published', Icons.apps, isMobile),
+          _statCard('100K+', 'Users Reached', Icons.people, isMobile),
+          _statCard('3+', 'Fintech Apps', Icons.account_balance, isMobile),
+          _statCard('Security-First', 'Approach', Icons.security, isMobile),
+          _statCard('Real-time', 'Systems Expert', Icons.speed, isMobile),
+          _statCard('UAE Market', 'Specialist', Icons.public, isMobile),
+        ],
+      ),
+    );
+  }
+
+  Widget _statCard(String value, String label, IconData icon, bool isMobile) {
+    return Container(
+      width: isMobile ? (MediaQuery.of(context).size.width - 100) / 2 : 150,
+      height: 130, // Fixed height for uniform cards
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF667EEA).withOpacity(0.2),
+            const Color(0xFF764BA2).withOpacity(0.2),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: const Color(0xFF667EEA).withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: const Color(0xFF667EEA), size: 32),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 11,
+              color: Colors.white70,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
@@ -424,32 +542,107 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Hello! I\'m a passionate Flutter developer with expertise in building beautiful, responsive applications for mobile and web platforms.',
+          'Professional Summary',
           style: TextStyle(
-            fontSize: 18,
-            color: Colors.white70,
-            height: 1.8,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
         const SizedBox(height: 20),
         const Text(
-          'I love turning ideas into reality through clean code and intuitive design. My focus is on creating user-centric applications that not only look great but also provide seamless user experiences.',
+          'I\'m a Flutter Developer with over 5 years of experience building scalable, secure mobile applications for fintech, e-commerce, and enterprise clients across the UAE. I specialize in creating high-performance apps with complex payment integrations, real-time features, and banking-grade security.',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 16,
+            color: Colors.white70,
+            height: 1.8,
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Text(
+          'Currently working at DSCALE.io, I\'ve contributed to major UAE projects including Ayshei (UAE\'s first web3 marketplace), xfi (money transfer app by Index Exchange), and Dalma Mall App (Abu Dhabi\'s largest mall companion app).',
+          style: TextStyle(
+            fontSize: 16,
             color: Colors.white70,
             height: 1.8,
           ),
         ),
         const SizedBox(height: 30),
-        Wrap(
-          spacing: 15,
-          runSpacing: 15,
-          children: [
-            _interestChip('Mobile Development'),
-            _interestChip('Web Development'),
-            _interestChip('UI/UX Design'),
-            _interestChip('Open Source'),
-          ],
+        const Text(
+          'What I Do Best',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 20),
+        _expertiseItem(
+          Icons.account_balance,
+          'FINTECH SOLUTIONS',
+          'Building secure payment systems, money transfer apps, and banking integrations compliant with UAE regulations',
+        ),
+        const SizedBox(height: 15),
+        _expertiseItem(
+          Icons.business,
+          'ENTERPRISE APPS',
+          'Developing large-scale applications for UAE businesses with features like indoor navigation and real-time tracking',
+        ),
+        const SizedBox(height: 15),
+        _expertiseItem(
+          Icons.shopping_cart,
+          'E-COMMERCE & MARKETPLACES',
+          'Creating auction systems, classified ads platforms, and shopping apps with advanced payment processing',
+        ),
+        const SizedBox(height: 15),
+        _expertiseItem(
+          Icons.security,
+          'SECURITY & COMPLIANCE',
+          'Implementing banking-grade security with freeRASP, biometric authentication, and Emirates ID KYC verification',
+        ),
+      ],
+    );
+  }
+
+  Widget _expertiseItem(IconData icon, String title, String description) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: Colors.white, size: 20),
+        ),
+        const SizedBox(width: 15),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF667EEA),
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white60,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -473,13 +666,13 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
       ),
       child: Column(
         children: [
-          _statItem('5+', 'Years Experience'),
+          _statItem('15+', 'Production Apps'),
           const SizedBox(height: 30),
-          _statItem('50+', 'Projects Completed'),
+          _statItem('100K+', 'Active Users'),
           const SizedBox(height: 30),
-          _statItem('30+', 'Happy Clients'),
+          _statItem('99.9%', 'Crash-Free Rate'),
           const SizedBox(height: 30),
-          _statItem('100%', 'Satisfaction'),
+          _statItem('Zero', 'Security Breaches'),
         ],
       ),
     );
@@ -508,21 +701,225 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
     );
   }
 
-  Widget _interestChip(String label) {
+  Widget _buildAchievementsSection({required GlobalKey key}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      key: key,
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFF0A0E27),
+            const Color(0xFF1A1F3A).withOpacity(0.5),
+          ],
         ),
-        borderRadius: BorderRadius.circular(25),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
+      child: Column(
+        children: [
+          _sectionTitle('Impact & Achievements'),
+          const SizedBox(height: 20),
+          const Text(
+            'Results that speak for themselves',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white60,
+            ),
+          ),
+          const SizedBox(height: 60),
+
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < 768;
+
+              if (isMobile) {
+                return Column(
+                  children: [
+                    _achievementCard(
+                      Icons.apps,
+                      '15+',
+                      'Production Apps',
+                      'Successfully published and maintained across App Store and Google Play',
+                    ),
+                    const SizedBox(height: 20),
+                    _achievementCard(
+                      Icons.people,
+                      '100,000+',
+                      'Active Users',
+                      'Apps collectively serving users across UAE, Saudi Arabia, Egypt, and Qatar',
+                    ),
+                    const SizedBox(height: 20),
+                    _achievementCard(
+                      Icons.account_balance,
+                      'Fintech Expertise',
+                      '3 Major Apps',
+                      'Built fintech applications handling sensitive financial transactions with zero security breaches',
+                    ),
+                    const SizedBox(height: 20),
+                    _achievementCard(
+                      Icons.bug_report,
+                      '99.9%',
+                      'Crash-Free Rate',
+                      'Maintained across all production apps through comprehensive testing and monitoring',
+                    ),
+                    const SizedBox(height: 20),
+                    _achievementCard(
+                      Icons.speed,
+                      '40%',
+                      'Performance Boost',
+                      'Reduced API response times through implementation of efficient caching strategies',
+                    ),
+                    const SizedBox(height: 20),
+                    _achievementCard(
+                      Icons.security,
+                      'Security First',
+                      'Zero Breaches',
+                      'Integrated freeRASP SDK protecting apps from tampering and reverse engineering',
+                    ),
+                  ],
+                );
+              }
+
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _achievementCard(
+                          Icons.apps,
+                          '15+',
+                          'Production Apps',
+                          'Successfully published and maintained across App Store and Google Play',
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: _achievementCard(
+                          Icons.people,
+                          '100,000+',
+                          'Active Users',
+                          'Apps collectively serving users across UAE, Saudi Arabia, Egypt, and Qatar',
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: _achievementCard(
+                          Icons.account_balance,
+                          'Fintech Expertise',
+                          '3 Major Apps',
+                          'Built fintech applications handling sensitive financial transactions with zero security breaches',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _achievementCard(
+                          Icons.bug_report,
+                          '99.9%',
+                          'Crash-Free Rate',
+                          'Maintained across all production apps through comprehensive testing and monitoring',
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: _achievementCard(
+                          Icons.speed,
+                          '40%',
+                          'Performance Boost',
+                          'Reduced API response times through implementation of efficient caching strategies',
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: _achievementCard(
+                          Icons.security,
+                          'Security First',
+                          'Zero Breaches',
+                          'Integrated freeRASP SDK protecting apps from tampering and reverse engineering',
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _achievementCard(IconData icon, String value, String title, String description) {
+    return Container(
+      padding: const EdgeInsets.all(30),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF667EEA).withOpacity(0.15),
+            const Color(0xFF764BA2).withOpacity(0.15),
+          ],
         ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFF667EEA).withOpacity(0.4),
+          width: 2,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+              ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF667EEA).withOpacity(0.3),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: Icon(icon, color: Colors.white, size: 40),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF667EEA),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.white60,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -548,27 +945,99 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
             builder: (context, constraints) {
               final isMobile = constraints.maxWidth < 768;
 
-              return Column(
+              return Wrap(
+                spacing: isMobile ? 0 : 30,
+                runSpacing: 20,
                 children: [
-                  _skillProgressBar('Flutter & Dart', 95, Icons.flutter_dash),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('Firebase', 90, Icons.local_fire_department),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('REST API Integration', 88, Icons.api),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('Payment Gateway Integration', 85, Icons.payment),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('State Management (Provider, Bloc)', 90, Icons.account_tree),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('UI/UX Design', 85, Icons.design_services),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('Git & Version Control', 88, Icons.source),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('Google Maps & Location Services', 82, Icons.location_on),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('Push Notifications', 85, Icons.notifications),
-                  const SizedBox(height: 25),
-                  _skillProgressBar('Responsive Design (iOS & Android)', 92, Icons.devices),
+                  // Core Development
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Flutter & Dart (5+ Years)', 95, Icons.flutter_dash),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Clean Architecture & MVVM', 90, Icons.architecture),
+                  ),
+
+                  // Backend & APIs
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('REST API & Dio/Retrofit', 92, Icons.api),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Firebase Ecosystem', 90, Icons.local_fire_department),
+                  ),
+
+                  // State Management
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Bloc/Cubit Pattern', 95, Icons.account_tree),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Provider & GetX', 88, Icons.settings_input_component),
+                  ),
+
+                  // Payments & Fintech
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Checkout.com & Stripe Integration', 90, Icons.payment),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Open Banking (Lean Technologies)', 85, Icons.account_balance),
+                  ),
+
+                  // Security
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('freeRASP & Security Implementation', 92, Icons.security),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Biometric Auth & Encryption', 88, Icons.fingerprint),
+                  ),
+
+                  // Real-time Features
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('WebRTC & Real-time Systems', 85, Icons.video_call),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('WebSocket & Socket.io', 82, Icons.sync_alt),
+                  ),
+
+                  // Maps & Navigation
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Google Maps & Indoor Navigation', 88, Icons.location_on),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Location Services & Geofencing', 85, Icons.my_location),
+                  ),
+
+                  // Platform & Tools
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('iOS & Android Native Integration', 87, Icons.devices),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Git & CI/CD', 90, Icons.source),
+                  ),
+
+                  // UI/UX
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Material Design & Cupertino', 92, Icons.design_services),
+                  ),
+                  SizedBox(
+                    width: isMobile ? double.infinity : (constraints.maxWidth - 30) / 2,
+                    child: _skillProgressBar('Responsive UI & Animations', 90, Icons.web),
+                  ),
                 ],
               );
             },
@@ -987,7 +1456,9 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
             runSpacing: 10,
             children: tech.map((t) => _techTag(t)).toList(),
           ),
-          if (appStoreUrl != null || playStoreUrl != null) ...[
+          // Only show store section if at least one valid URL exists
+          if ((appStoreUrl != null && appStoreUrl.isNotEmpty) ||
+              (playStoreUrl != null && playStoreUrl.isNotEmpty)) ...[
             const SizedBox(height: 25),
             const Divider(color: Colors.white10, thickness: 1),
             const SizedBox(height: 20),
@@ -1014,13 +1485,14 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
                     isWide
                         ? const SizedBox(width: 15)
                         : const SizedBox(height: 15),
-                    if (appStoreUrl != null)
+                    if (appStoreUrl != null && appStoreUrl.isNotEmpty)
                       _storeButton('App Store', Icons.apple, () => _openUrl(appStoreUrl)),
-                    if (appStoreUrl != null && playStoreUrl != null)
+                    if ((appStoreUrl != null && appStoreUrl.isNotEmpty) &&
+                        (playStoreUrl != null && playStoreUrl.isNotEmpty))
                       isWide
                           ? const SizedBox(width: 10)
                           : const SizedBox(height: 10),
-                    if (playStoreUrl != null)
+                    if (playStoreUrl != null && playStoreUrl.isNotEmpty)
                       _storeButton('Play Store', Icons.android, () => _openUrl(playStoreUrl)),
                   ],
                 );
@@ -1098,6 +1570,288 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
     );
   }
 
+  Widget _buildAllProjectsSection({required GlobalKey key}) {
+    final categories = ['All', 'Fintech', 'E-commerce', 'Enterprise', 'Healthcare', 'Delivery'];
+
+    // Define all projects with categories
+    final allProjects = [
+      {'name': 'Mo3amalat', 'category': 'Enterprise', 'icon': Icons.video_call, 'company': 'It.Com', 'appStore': null, 'playStore': null, 'description': 'Government services platform with live video chat connecting customers with agents for document preparation'},
+      {'name': 'Mnzlak', 'category': 'E-commerce', 'icon': Icons.home, 'company': 'It.Com', 'appStore': null, 'playStore': null, 'description': 'Real estate marketplace for renting or buying apartments in UAE'},
+      {'name': 'My Order', 'category': 'Delivery', 'icon': Icons.restaurant, 'company': 'It.Com', 'appStore': null, 'playStore': null, 'description': 'Multi-restaurant food delivery with real-time order tracking'},
+      {'name': 'MyKom', 'category': 'Delivery', 'icon': Icons.water_drop, 'company': 'Technology District', 'appStore': 'https://apps.apple.com/us/app/mykom/id1638383150', 'playStore': 'https://play.google.com/store/apps/details?id=com.districtapp.mykomapp', 'description': 'Water delivery platform connecting users to service providers'},
+      {'name': 'Cerameco', 'category': 'Healthcare', 'icon': Icons.health_and_safety, 'company': 'Ragueh SCG', 'appStore': null, 'playStore': null, 'description': 'Dental clinic app for appointments and online diagnoses'},
+      {'name': 'Smiletech', 'category': 'Healthcare', 'icon': Icons.medical_services, 'company': 'Ragueh SCG', 'appStore': null, 'playStore': null, 'description': 'Communication platform between dental lab and dentist clients'},
+      {'name': 'Elbayrak', 'category': 'Enterprise', 'icon': Icons.pets, 'company': 'Freelance', 'appStore': null, 'playStore': null, 'description': 'Livestock management system for tracking animals, vaccinations, and sales'},
+      {'name': 'Zabayh', 'category': 'E-commerce', 'icon': Icons.shopping_basket, 'company': 'Freelance', 'appStore': 'https://apps.apple.com/eg/app/id1589950806', 'playStore': 'https://play.google.com/store/apps/details?id=com.qrc.zabayh', 'description': 'Butcher marketplace with variety of meat products'},
+    ];
+
+    final filteredProjects = _selectedCategory == 'All'
+        ? allProjects
+        : allProjects.where((p) => p['category'] == _selectedCategory).toList();
+
+    return Container(
+      key: key,
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFF1A1F3A).withOpacity(0.5),
+            const Color(0xFF0A0E27),
+          ],
+        ),
+      ),
+      child: Column(
+        children: [
+          _sectionTitle('All Projects'),
+          const SizedBox(height: 20),
+          const Text(
+            'Complete portfolio of 11+ published applications',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white60,
+            ),
+          ),
+          const SizedBox(height: 40),
+
+          // Category Filters
+          Wrap(
+            spacing: 15,
+            runSpacing: 15,
+            alignment: WrapAlignment.center,
+            children: categories.map((category) {
+              final isSelected = _selectedCategory == category;
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedCategory = category;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                  decoration: BoxDecoration(
+                    gradient: isSelected
+                        ? const LinearGradient(
+                            colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                          )
+                        : null,
+                    color: isSelected ? null : Colors.white.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(
+                      color: isSelected
+                          ? const Color(0xFF667EEA)
+                          : Colors.white.withOpacity(0.2),
+                      width: 2,
+                    ),
+                  ),
+                  child: Text(
+                    category,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 60),
+
+          // Projects Grid
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < 768;
+              final crossAxisCount = isMobile ? 1 : 2;
+
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 30,
+                  mainAxisSpacing: 30,
+                  childAspectRatio: isMobile ? 1.2 : 2.0, // Much shorter cards
+                ),
+                itemCount: filteredProjects.length,
+                itemBuilder: (context, index) {
+                  final project = filteredProjects[index];
+                  return _compactProjectCard(
+                    project['name'] as String,
+                    project['description'] as String,
+                    project['company'] as String,
+                    project['category'] as String,
+                    project['icon'] as IconData,
+                    project['appStore'] as String?,
+                    project['playStore'] as String?,
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _compactProjectCard(
+    String name,
+    String description,
+    String company,
+    String category,
+    IconData icon,
+    String? appStore,
+    String? playStore,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16), // Reduced from 20
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF667EEA).withOpacity(0.1),
+            const Color(0xFF764BA2).withOpacity(0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16), // Reduced from 20
+        border: Border.all(
+          color: const Color(0xFF667EEA).withOpacity(0.3),
+          width: 1.5, // Reduced from 2
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8), // Reduced from 10
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: Colors.white, size: 20), // Reduced from 24
+              ),
+              const SizedBox(width: 10), // Reduced from 12
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 16, // Reduced from 18
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      company,
+                      style: const TextStyle(
+                        fontSize: 10, // Reduced from 11
+                        color: Colors.white60,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8), // Reduced from 12
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), // Reduced padding
+            decoration: BoxDecoration(
+              color: const Color(0xFF667EEA).withOpacity(0.3),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              category,
+              style: const TextStyle(
+                fontSize: 9, // Reduced from 10
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8), // Reduced from 10
+          Text(
+            description,
+            style: const TextStyle(
+              fontSize: 12, // Reduced from 13
+              color: Colors.white70,
+              height: 1.3, // Reduced from 1.4
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          // Only show store buttons if at least one valid URL exists
+          if ((appStore != null && appStore.isNotEmpty) ||
+              (playStore != null && playStore.isNotEmpty)) ...[
+            const SizedBox(height: 8), // Reduced from 12
+            Row(
+              children: [
+                if (appStore != null && appStore.isNotEmpty)
+                  Expanded(
+                    child: _smallStoreButton('App Store', Icons.apple, () => _openUrl(appStore)),
+                  ),
+                if ((appStore != null && appStore.isNotEmpty) &&
+                    (playStore != null && playStore.isNotEmpty))
+                  const SizedBox(width: 6), // Reduced from 8
+                if (playStore != null && playStore.isNotEmpty)
+                  Expanded(
+                    child: _smallStoreButton('Play Store', Icons.android, () => _openUrl(playStore)),
+                  ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _smallStoreButton(String label, IconData icon, VoidCallback onPressed) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4), // Reduced vertical padding
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF667EEA).withOpacity(0.2),
+              const Color(0xFF764BA2).withOpacity(0.2),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(6), // Reduced from 8
+          border: Border.all(
+            color: const Color(0xFF667EEA).withOpacity(0.5),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white70, size: 12), // Reduced from 14
+            const SizedBox(width: 4), // Reduced from 5
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10, // Reduced from 11
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildFooter() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 60),
@@ -1124,23 +1878,37 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
           return Column(
             children: [
               const Text(
-                'Let\'s Connect',
+                'Let\'s Work Together',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               const Text(
-                'Feel free to reach out for opportunities or just to say hello!',
+                'I\'m always interested in hearing about new projects and opportunities',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white60,
+                  fontSize: 18,
+                  color: Colors.white70,
                 ),
               ),
               const SizedBox(height: 40),
+
+              // Contact Details
+              Wrap(
+                spacing: 40,
+                runSpacing: 20,
+                alignment: WrapAlignment.center,
+                children: [
+                  _contactInfoItem(Icons.phone, phoneNumber, 'tel:$phoneNumber'),
+                  _contactInfoItem(Icons.email, email, 'mailto:$email'),
+                  _contactInfoItem(Icons.location_on, 'Dubai, UAE', null),
+                ],
+              ),
+
+              const SizedBox(height: 50),
 
               // Action Buttons
               Wrap(
@@ -1174,7 +1942,7 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
               const SizedBox(height: 30),
 
               const Text(
-                '© 2024 Mahmoud Salem Ibrahim. All rights reserved.',
+                '© 2025 Mahmoud Salem Ibrahim. All rights reserved.',
                 style: TextStyle(
                   color: Colors.white60,
                   fontSize: 14,
@@ -1182,7 +1950,7 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
               ),
               const SizedBox(height: 10),
               const Text(
-                'Built with Flutter',
+                'Built with Flutter | Dubai, UAE',
                 style: TextStyle(
                   color: Colors.white60,
                   fontSize: 14,
@@ -1191,6 +1959,42 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _contactInfoItem(IconData icon, String text, String? url) {
+    return InkWell(
+      onTap: url != null ? () => _openUrl(url) : null,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF667EEA).withOpacity(0.2),
+              const Color(0xFF764BA2).withOpacity(0.2),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: const Color(0xFF667EEA).withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: const Color(0xFF667EEA), size: 20),
+            const SizedBox(width: 10),
+            Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
