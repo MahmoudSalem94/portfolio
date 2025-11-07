@@ -255,7 +255,7 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
     return Container(
       key: key,
      
-      padding: const EdgeInsets.only(left: 50, right: 50, top: 100,bottom:100), // Added top padding to avoid navbar
+      padding: const EdgeInsets.only(left: 50, right: 50, top: 100,bottom:50), // Added top padding to avoid navbar
       child: Center(
         child: LayoutBuilder(
           builder: (context, constraints) {
